@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1063814713513",
+    "firebase_url": "https://iitmandivendors.firebaseio.com",
+    "project_id": "iitmandivendors",
+    "storage_bucket": "iitmandivendors.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063814713513:android:1a1a28c5e9954de9",
+        "android_client_info": {
+          "package_name": "com.iitmandi.vendors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063814713513-obct88p0nkmrnukmm5antju9nr2csqok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iitmandi.vendors",
+            "certificate_hash": "270bf2778d961778e961a231e471f676c39f1805"
+          }
+        },
+        {
+          "client_id": "1063814713513-6a3gk8mgs6ph68u0uhllrf04ghooiol7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6yjBmAWLNrGr40BOdabYXip506rxrQQw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063814713513-6a3gk8mgs6ph68u0uhllrf04ghooiol7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
