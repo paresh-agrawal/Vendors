@@ -5,10 +5,16 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -25,6 +37,15 @@ public class VendorsListFruits extends Fragment {
 
     private boolean viewIsAtHome;
     //private Fragment fragment = new EventListTechnicalList();
+    private RelativeLayout rl_vendor_list_fruits;
+    private List<VendorsListView> vendorListListFruits = new ArrayList<>();
+    private RecyclerView rv_vendors_fruits;
+    private VendorsListAdapter mAdapterFruits;
+    private VendorsListView vendorsListFruits;
+    private ProgressBar progressBar;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Fruits");
 
     public VendorsListFruits() {
         // Required empty public constructor
@@ -36,205 +57,62 @@ public class VendorsListFruits extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_vendors_list_fruits, container, false);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("vendor_name");
-        final TextView vendor_name = (TextView)rootView.findViewById(R.id.vendor_name);
+
+        progressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+
+        rv_vendors_fruits = (RecyclerView) rootView.findViewById(R.id.rv_vendors_fruits);
+
+        mAdapterFruits = new VendorsListAdapter(vendorListListFruits);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getActivity().getApplicationContext());
+        rv_vendors_fruits.setLayoutManager(mLayoutManager1);
+        rv_vendors_fruits.setItemAnimator(new DefaultItemAnimator());
+        //rv_vendors_fruits.addItemDecoration(new MyDividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL, 16));
+        rv_vendors_fruits.setAdapter(mAdapterFruits);
+
+        prepareVendorsListFruits();
+        return rootView;
+    }
+
+    private void prepareVendorsListFruits() {
+        // Read from the database
+        progressBar.setVisibility(View.VISIBLE);
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                vendor_name.setText(value);
+                vendorListListFruits.clear();
+                String[] vendor_name = new String[20],vendor_phone = new String[20],
+                        vendor_rating = new String[20], vendor_pic_url = new String[20];
+                int i = 0;
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    vendor_name[i] = dsp.child("name").getValue().toString();
+                    vendor_phone[i] = dsp.child("phone").getValue().toString();
+                    vendor_rating[i] = dsp.child("rating").getValue().toString();
+                    vendor_pic_url[i] = dsp.child("url").getValue().toString();
+                    i++;
+
+                }
+                int j=0;
+                for(j=0;j<i;j++) {
+                    vendorsListFruits = new VendorsListView(vendor_name[j], vendor_phone[j], vendor_rating[j],vendor_pic_url[j]);
+                    vendorListListFruits.add(vendorsListFruits);
+                }
+                Collections.sort(vendorListListFruits,
+                        (l2, l1) -> l1.getVendor_rating().compareTo(l2.getVendor_rating()));
+                progressBar.setVisibility(View.INVISIBLE);
+                mAdapterFruits.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-
+                Log.w("value", "Failed to read value.", error.toException());
             }
         });
-        /*RelativeLayout rl_tech_events_event1 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event1);
-        RelativeLayout rl_tech_events_event2 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event2);
-        RelativeLayout rl_tech_events_event3 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event3);
-        RelativeLayout rl_tech_events_event4 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event4);
-        RelativeLayout rl_tech_events_event5 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event5);
-        RelativeLayout rl_tech_events_event6 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event6);
-        RelativeLayout rl_tech_events_event7 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event7);
-        RelativeLayout rl_tech_events_event8 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event8);
-        RelativeLayout rl_tech_events_event9 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event9);
-        RelativeLayout rl_tech_events_event10 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event10);
-        RelativeLayout rl_tech_events_event11 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event11);
-        //RelativeLayout rl_tech_events_event12 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event12);
-        RelativeLayout rl_tech_events_event13 = (RelativeLayout) rootView.findViewById(R.id.rl_tech_events_event13);
-
-        TextView tv_event1 = (TextView) rootView.findViewById(R.id.tv_event1);
-        TextView tv_event2 = (TextView) rootView.findViewById(R.id.tv_event2);
-        TextView tv_event3 = (TextView) rootView.findViewById(R.id.tv_event3);
-        TextView tv_event4 = (TextView) rootView.findViewById(R.id.tv_event4);
-        TextView tv_event5 = (TextView) rootView.findViewById(R.id.tv_event5);
-        TextView tv_event6 = (TextView) rootView.findViewById(R.id.tv_event6);
-        TextView tv_event7 = (TextView) rootView.findViewById(R.id.tv_event7);
-        TextView tv_event8 = (TextView) rootView.findViewById(R.id.tv_event8);
-        TextView tv_event9 = (TextView) rootView.findViewById(R.id.tv_event9);
-        TextView tv_event10 = (TextView) rootView.findViewById(R.id.tv_event10);
-        TextView tv_event11 = (TextView) rootView.findViewById(R.id.tv_event11);
-        //TextView tv_event12 = (TextView) rootView.findViewById(R.id.tv_event12);
-        TextView tv_event13 = (TextView) rootView.findViewById(R.id.tv_event13);
-
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(),  "fonts/nexa.otf");
-        tv_event1.setTypeface(custom_font);
-        tv_event2.setTypeface(custom_font);
-        tv_event3.setTypeface(custom_font);
-        tv_event4.setTypeface(custom_font);
-        tv_event5.setTypeface(custom_font);
-        tv_event6.setTypeface(custom_font);
-        tv_event7.setTypeface(custom_font);
-        tv_event8.setTypeface(custom_font);
-        tv_event9.setTypeface(custom_font);
-        tv_event10.setTypeface(custom_font);
-        tv_event11.setTypeface(custom_font);
-        //tv_event12.setTypeface(custom_font);
-        tv_event13.setTypeface(custom_font);
-
-        rl_tech_events_event1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event1);
-            }
-        });
-        rl_tech_events_event2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event2);
-            }
-        });
-        rl_tech_events_event3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event3);
-            }
-        });
-        rl_tech_events_event4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event4);
-            }
-        });
-        rl_tech_events_event5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event5);
-            }
-        });
-        rl_tech_events_event6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event6);
-            }
-        });
-        rl_tech_events_event7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event7);
-            }
-        });
-        rl_tech_events_event8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event8);
-            }
-        });
-        rl_tech_events_event9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event9);
-            }
-        });
-        rl_tech_events_event10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event10);
-            }
-        });
-        rl_tech_events_event11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event11);
-            }
-        });
-        *//*rl_tech_events_event12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event12);
-            }
-        });*//*
-        rl_tech_events_event13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayView(R.id.rl_tech_events_event13);
-            }
-        });*/
-        return rootView;
     }
-    /*public void displayView(int viewId) {
 
-        String title = getString(R.string.app_name);
-        Bundle bundle = new Bundle();
-        switch (viewId) {
-
-            case R.id.rl_tech_events_event1:
-                bundle.putInt("key",0);
-                break;
-            case R.id.rl_tech_events_event2:
-                bundle.putInt("key",1);
-                break;
-            case R.id.rl_tech_events_event3:
-                bundle.putInt("key",2);
-                break;
-            case R.id.rl_tech_events_event4:
-                bundle.putInt("key",3);
-                break;
-            case R.id.rl_tech_events_event5:
-                bundle.putInt("key",4);
-                break;
-            case R.id.rl_tech_events_event6:
-                bundle.putInt("key",5);
-                break;
-            case R.id.rl_tech_events_event7:
-                bundle.putInt("key",6);
-                break;
-            case R.id.rl_tech_events_event8:
-                bundle.putInt("key",7);
-                break;
-            case R.id.rl_tech_events_event9:
-                bundle.putInt("key",8);
-                break;
-            case R.id.rl_tech_events_event10:
-                bundle.putInt("key",9);
-                break;
-            case R.id.rl_tech_events_event11:
-                bundle.putInt("key",10);
-                break;
-            *//*case R.id.rl_tech_events_event12:
-                bundle.putInt("key",11);
-                break;*//*
-            case R.id.rl_tech_events_event13:
-                bundle.putInt("key",11);
-                break;
-
-
-        }
-        fragment.setArguments(bundle);
-        viewIsAtHome = true;
-        title  = "Events";
-        if (fragment != null) {
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
-            ft.commit();
-        }
-
-    }*/
     @Override
     public void onDestroy() {
         super.onDestroy();

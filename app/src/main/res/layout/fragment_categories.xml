@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    tools:showIn="@layout/app_bar_main">
+    android:layout_margin="4dp">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,18 +13,17 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/categories"
                 android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textSize="20dp"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/primary_text"/>-->
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginTop="10dp"
                 android:background="@color/grey_500"
                 app:cardCornerRadius="4dp"
                 android:elevation="4dp">
@@ -41,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:background="@drawable/fruits"
-                        android:alpha=".6"/>
+                        android:alpha=".5"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -61,11 +57,21 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/rl_vegetables">
+                    android:id="@+id/rl_vegetables"
+                    android:background="@android:color/black">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:background="@drawable/vegetables"/>
+                        android:background="@drawable/vegetables"
+                        android:alpha=".5"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="VEGETABLES"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:textSize="30dp"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
@@ -78,11 +84,21 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/rl_milk">
+                    android:id="@+id/rl_milk"
+                    android:background="@android:color/black">
                     <ImageView
-                        android:layout_width="120dp"
+                        android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:background="@drawable/milk"/>
+                        android:background="@drawable/milk"
+                        android:alpha=".5"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="MILK"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:textSize="30dp"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

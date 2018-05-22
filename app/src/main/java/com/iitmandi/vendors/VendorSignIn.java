@@ -1,5 +1,6 @@
 package com.iitmandi.vendors;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -22,10 +23,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
-public class Login extends AppCompatActivity implements
+public class VendorSignIn extends AppCompatActivity implements
         View.OnClickListener {
 
     private static final String TAG = "PhoneAuthActivity";
@@ -61,6 +64,8 @@ public class Login extends AppCompatActivity implements
     private Button mVerifyButton;
     private Button mResendButton;
     private Button mSignOutButton;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class Login extends AppCompatActivity implements
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
         }
+        database = FirebaseDatabase.getInstance();
 
         // Assign views
         mPhoneNumberViews = findViewById(R.id.phone_auth_fields);
@@ -177,7 +183,10 @@ public class Login extends AppCompatActivity implements
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-
+        if (currentUser!=null){
+            finish();
+            startActivity(new Intent(VendorSignIn.this, VendorInfo.class));
+        }
         // [START_EXCLUDE]
         if (mVerificationInProgress && validatePhoneNumber()) {
             startPhoneNumberVerification(mPhoneNumberField.getText().toString());
@@ -244,7 +253,10 @@ public class Login extends AppCompatActivity implements
 
                             FirebaseUser user = task.getResult().getUser();
                             // [START_EXCLUDE]
-                            updateUI(STATE_SIGNIN_SUCCESS, user);
+
+                            finish();
+                            startActivity(new Intent(VendorSignIn.this, VendorInfo.class));
+                            //updateUI(STATE_SIGNIN_SUCCESS, user);
                             // [END_EXCLUDE]
                         } else {
                             // Sign in failed, display a message and update the UI
@@ -331,7 +343,7 @@ public class Login extends AppCompatActivity implements
                 mDetailText.setText(R.string.status_sign_in_failed);
                 break;
             case STATE_SIGNIN_SUCCESS:
-                // Np-op, handled by sign-in check
+                //startActivity(new Intent(VendorSignIn.this, SignInSelect.class));
                 break;
         }
 
@@ -363,6 +375,13 @@ public class Login extends AppCompatActivity implements
         }
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(VendorSignIn.this, SignInSelect.class));
+        finish();
+        super.onBackPressed();
     }
 
     private void enableViews(View... views) {
