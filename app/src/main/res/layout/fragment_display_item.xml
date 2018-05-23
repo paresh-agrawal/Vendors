@@ -89,7 +89,7 @@
         android:layout_height="40dp"
         android:layout_margin="16dp"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_add"
+        app:src="@android:drawable/ic_call"
         app:layout_anchor="@id/viewA"
         app:layout_anchorGravity="bottom|right|end"
         tools:ignore="VectorDrawableCompat" />

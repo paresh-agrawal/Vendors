@@ -133,7 +133,7 @@ public class VendorMain extends AppCompatActivity
             ft.commit();
         }
 
-        // set the toolbar vendor_name
+        // set the toolbar item_name
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }

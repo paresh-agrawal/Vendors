@@ -81,4 +81,15 @@
         <item>Vegetables</item>
         <item>Milk</item>
     </string-array>
+
+    <string-array name="scale">
+        <item>₹/kg</item>
+        <item>₹/dozen</item>
+        <item>₹/litre</item>
+    </string-array>
+    <string-array name="quantity">
+        <item> kg</item>
+        <item> dozen</item>
+        <item> litre</item>
+    </string-array>
 </resources>

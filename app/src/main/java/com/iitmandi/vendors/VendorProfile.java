@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddItem extends Fragment {
+public class VendorProfile extends Fragment {
 
     private boolean viewIsAtHome;
     private Fragment fragment = new VendorsList();
@@ -59,7 +59,7 @@ public class AddItem extends Fragment {
     private TextView tv_rate_scale,tv_quantity_scale;
     private Spinner spinner_scale;
 
-    public AddItem() {
+    public VendorProfile() {
         // Required empty public constructor
     }
 
@@ -79,7 +79,7 @@ public class AddItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View add_item_fragment = inflater.inflate(R.layout.fragment_add_item, container, false);
+        View add_item_fragment = inflater.inflate(R.layout.fragment_display_item, container, false);
         ((VendorMain) getActivity())
                 .setActionBarTitle("Home");
 

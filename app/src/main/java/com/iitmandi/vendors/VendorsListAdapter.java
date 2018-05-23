@@ -12,8 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -30,19 +36,50 @@ public class VendorsListAdapter extends RecyclerView.Adapter<VendorsListAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView vendor_name, vendor_phone_number, vendor_rating;
         public ImageView iv_vendor_profile_image;
+        public RelativeLayout rl_vendor;
+        public FirebaseDatabase database = FirebaseDatabase.getInstance();
+        public DatabaseReference myRef;
+        public String category=null;
+        public int c=0;
         public MyViewHolder(View view) {
             super(view);
             vendor_name = (TextView) view.findViewById(R.id.tv_name);
             vendor_rating = (TextView) view.findViewById(R.id.tv_rating);
             vendor_phone_number = (TextView) view.findViewById(R.id.tv_phone_number);
             iv_vendor_profile_image = (ImageView) view.findViewById(R.id.iv_vendor_profile_image);
+            rl_vendor = (RelativeLayout)view.findViewById(R.id.rl_vendor);
 
+            myRef = database.getReference();
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("rating",String.valueOf(Float.valueOf(vendor_rating.getText().toString())));
+                    //Log.d("rating",String.valueOf(Float.valueOf(vendor_rating.getText().toString())));
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            c=0;
+                            category=null;
+                            for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                                for (DataSnapshot data : dsp.getChildren()){
+                                    if (vendor_phone_number.getText().toString().equals(data.getKey().toString())){
+                                        category = dsp.getKey().toString();
 
+
+
+                                        c=1;
+                                        break;
+                                    }
+                                }if (c==1){
+                                    break;
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
         }
